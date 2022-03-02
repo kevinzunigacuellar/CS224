@@ -2,6 +2,12 @@ package Dijkstra;
 
 import Dijkstra.utils.Graph;
 
+/*
+  * Note:
+  * Node s has been replaced by 1
+  * Node t has been replaced by 8
+*/
+
 public class App {
   public static void main(String[] args) {
     Graph g = new Graph(9);
@@ -21,9 +27,6 @@ public class App {
     g.addEgde(7, 8, 19);
 
     int[] distance = g.dijkstra(g, 1);
-    for (int i = 1; i < distance.length; i++) {
-      System.out.println("distance from 1 to " + i + " is " + distance[i]);
-    }
   }
 
 }

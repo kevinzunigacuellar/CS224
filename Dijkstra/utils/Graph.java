@@ -1,5 +1,6 @@
 package Dijkstra.utils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -32,8 +33,24 @@ public class Graph {
     }
   }
 
+  public void addNodetoPath(int node, ArrayList<ArrayList<Integer>> parent) {
+    for (int i = 0; i < parent.size(); i++) {
+      parent.get(i).add(node);
+    }
+  }
+
+  public Edge extractMin(PriorityQueue<Edge> pq) {
+    Edge min = pq.poll();
+    return min;
+  }
+
+  public void changeKey(PriorityQueue<Edge> pq, int w, int weight) {
+    pq.add(new Edge(w, w, weight));
+  }
+
   public int[] dijkstra(Graph G, int s) {
 
+    System.out.println("Graph is represented using an adjacency list.");
     // create a priority queue. Comparing the weights of the edges
     PriorityQueue<Edge> pq = new PriorityQueue<Edge>(vertices, (a, b) -> a.weight - b.weight);
 
@@ -46,17 +63,43 @@ public class Graph {
       distance[i] = Integer.MAX_VALUE;
     }
 
+    // initialize parent array
+    ArrayList<ArrayList<Integer>> parent = new ArrayList<ArrayList<Integer>>();
+    for (int i = 0; i < vertices; i++) {
+      parent.add(new ArrayList<Integer>());
+    }
+
     // initialize distance and pq with source
     distance[s] = 0;
     pq.add(new Edge(s, s, 0));
 
     while (!pq.isEmpty()) {
+
       // extract min value
-      Edge edge = pq.poll();
+      Edge edge = extractMin(pq);
       int v = edge.destination;
 
-      // set node to discovered
-      discovered[v] = true;
+      // add node to parent
+      for (int i = 0; i < parent.size(); i++) {
+        if (!discovered[i]) {
+          if (!parent.get(i).contains(v)) {
+            parent.get(i).add(v);
+          }
+        }
+      }
+      // set node to discovered and print path
+      if (!discovered[v]) {
+        discovered[v] = true;
+        System.out.println("Node " + v + " included in S with the shortest path length " + distance[v]);
+        System.out.print("Path: ");
+        for (int a = 0; a < parent.get(v).size(); a++) {
+          System.out.print(parent.get(v).get(a));
+          if (a != parent.get(v).size() - 1) {
+            System.out.print(" -> ");
+          }
+        }
+        System.out.println();
+      }
 
       // get its adjacency list and iterate over it
       LinkedList<Edge> v_adj = G.adjacencylist[v];
@@ -74,7 +117,7 @@ public class Graph {
             distance[w] = distance[v] + weight;
 
             // add to pq
-            pq.add(new Edge(v, w, distance[w]));
+            changeKey(pq, w, distance[w]);
           }
         }
       }
