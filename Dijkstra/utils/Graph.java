@@ -44,7 +44,7 @@ public class Graph {
     return min;
   }
 
-  public void changeKey(PriorityQueue<Edge> pq, int w, int weight) {
+  public void changeKey(PriorityQueue<Edge> pq, int o, int w, int weight) {
     pq.add(new Edge(w, w, weight));
   }
 
@@ -78,27 +78,12 @@ public class Graph {
       // extract min value
       Edge edge = extractMin(pq);
       int v = edge.destination;
+      int o = edge.source;
 
-      // add node to parent
-      for (int i = 0; i < parent.size(); i++) {
-        if (!discovered[i]) {
-          if (!parent.get(i).contains(v)) {
-            parent.get(i).add(v);
-          }
-        }
-      }
       // set node to discovered and print path
       if (!discovered[v]) {
         discovered[v] = true;
         System.out.println("Node " + v + " included in S with the shortest path length " + distance[v]);
-        System.out.print("Path: ");
-        for (int a = 0; a < parent.get(v).size(); a++) {
-          System.out.print(parent.get(v).get(a));
-          if (a != parent.get(v).size() - 1) {
-            System.out.print(" -> ");
-          }
-        }
-        System.out.println();
       }
 
       // get its adjacency list and iterate over it
@@ -112,15 +97,28 @@ public class Graph {
 
           // if distance is greater than the weight of the edge + distance of the source
           if (distance[v] + weight < distance[w]) {
+            // add to parent
+            parent.get(w).add(v_adj.get(i).source);
 
             // update distance
             distance[w] = distance[v] + weight;
 
             // add to pq
-            changeKey(pq, w, distance[w]);
+            changeKey(pq, o, w, distance[w]);
           }
         }
       }
+    }
+
+    for (int a = 0; a < parent.size(); a++) {
+      System.out.print("Path: " + a + ": ");
+      for (int b = 0; b < parent.get(a).size(); b++) {
+        System.out.print(parent.get(a).get(b));
+        if (b != parent.get(a).size() - 1) {
+          System.out.print(" -> ");
+        }
+      }
+      System.out.println();
     }
     return distance;
   }

@@ -25,6 +25,7 @@ public class App {
     g.addEgde(6, 7, 6);
     g.addEgde(6, 8, 6);
     g.addEgde(7, 8, 19);
+    g.addEgde(7, 5, 2);
 
     int[] distance = g.dijkstra(g, 1);
   }
