@@ -2,11 +2,12 @@ package Inversions;
 
 public class App {
 
-  // object to store number of inversions
+  // object to store number of inversions (pass by reference)
   public static class WrapInt {
     int value;
   }
 
+  // merge method
   public static void merge(int arr[], int left, int mid, int right, WrapInt inv) {
 
     // calculate the size of the left and right subarrays
@@ -30,18 +31,11 @@ public class App {
     int arr_index = left;
 
     while (left_index < left_size && right_index < right_size) {
+
       if (left_arr[left_index] <= right_arr[right_index]) {
         arr[arr_index] = left_arr[left_index];
         left_index++;
       } else {
-        System.out.print("Comparing " + left_arr[left_index] + " and " + right_arr[right_index]);
-        print_array(arr);
-        // calculate the inversions by substracting the original array indexes
-        // i.e 3 -> with an index of 1 and 9 -> with an index of 4
-        // then the number of inversions is 4 - 1 = 3
-        // in this case I am modifiying the original array
-        // so my original array indexes are changed so I dont get the right amount of
-        // inversions
         arr[arr_index] = right_arr[right_index];
         right_index++;
         inv.value += left_size - left_index;
@@ -84,17 +78,26 @@ public class App {
 
   public static void main(String[] args) {
     // variables
-    int arr[] = { 7, 3, 11, 12, 9, 6, 2, 10, 8, 4, 5, 1 };
-    int arr2[] = { 7, 3, 11, 12, 9, 6, 2, 10, 8, 4, 5, 1 };
-
-    // 4+2+1+1 = 5
+    int arr[] = { 1, 13, 14, 2, 25, 26 };
     WrapInt inv = new WrapInt();
 
-    // compute
+    // exercise 1
+    System.out.print("Before sorting: ");
     print_array(arr);
-    merge_sort(arr2, 0, arr.length - 1, inv);
+    merge_sort(arr, 0, arr.length - 1, inv);
     System.out.print("Sorted array: ");
     print_array(arr);
     System.out.println("Inversion count is " + inv.value);
+
+    // exercise 2
+    int arr2[] = { 45, 23, 12, 34, 10 };
+    WrapInt inv2 = new WrapInt();
+
+    System.out.print("Before sorting: ");
+    print_array(arr2);
+    merge_sort(arr2, 0, arr2.length - 1, inv2);
+    System.out.print("Sorted array: ");
+    print_array(arr2);
+    System.out.println("Inversion count is " + inv2.value);
   }
 }
