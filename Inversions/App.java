@@ -1,14 +1,13 @@
 package Inversions;
 
 public class App {
-
   // object to store number of inversions (pass by reference)
   public static class WrapInt {
     int value;
   }
 
   // merge method
-  public static void merge(int arr[], int left, int mid, int right, WrapInt inv) {
+  public static void MergeAndCount(int arr[], int left, int mid, int right, WrapInt inv) {
 
     // calculate the size of the left and right subarrays
     int left_size = mid - left + 1;
@@ -59,12 +58,12 @@ public class App {
   }
 
   // merge sort
-  public static void merge_sort(int arr[], int left, int right, WrapInt inv) {
+  public static void sortAndCount(int arr[], int left, int right, WrapInt inv) {
     if (left < right) {
       int mid = (left + right) / 2;
-      merge_sort(arr, left, mid, inv);
-      merge_sort(arr, mid + 1, right, inv);
-      merge(arr, left, mid, right, inv);
+      sortAndCount(arr, left, mid, inv);
+      sortAndCount(arr, mid + 1, right, inv);
+      MergeAndCount(arr, left, mid, right, inv);
     }
   }
 
@@ -77,14 +76,14 @@ public class App {
   }
 
   public static void main(String[] args) {
-    // variables
+
+    // exercise 1
     int arr[] = { 1, 13, 14, 2, 25, 26 };
     WrapInt inv = new WrapInt();
 
-    // exercise 1
     System.out.print("Before sorting: ");
     print_array(arr);
-    merge_sort(arr, 0, arr.length - 1, inv);
+    sortAndCount(arr, 0, arr.length - 1, inv);
     System.out.print("Sorted array: ");
     print_array(arr);
     System.out.println("Inversion count is " + inv.value);
@@ -95,9 +94,10 @@ public class App {
 
     System.out.print("Before sorting: ");
     print_array(arr2);
-    merge_sort(arr2, 0, arr2.length - 1, inv2);
+    sortAndCount(arr2, 0, arr2.length - 1, inv2);
     System.out.print("Sorted array: ");
     print_array(arr2);
     System.out.println("Inversion count is " + inv2.value);
+
   }
 }
